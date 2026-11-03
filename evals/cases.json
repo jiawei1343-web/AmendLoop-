@@ -1,0 +1,190 @@
+[
+  {
+    "id": "W1",
+    "domain": "writing",
+    "mode": "new_chat",
+    "turns": [
+      {
+        "role": "user",
+        "content": "把这些信息整理成CSV：设计稿，李明；排版，王莉。列名是事项和负责人。"
+      }
+    ],
+    "saved_correction": "CSV只输出原始文本，不加代码围栏和解释。",
+    "criterion": "输出是否为可直接保存的CSV原文？"
+  },
+  {
+    "id": "W2",
+    "domain": "writing",
+    "mode": "same_chat",
+    "turns": [
+      {
+        "role": "user",
+        "content": "上次你把FlowNest翻成了中文，这个品牌名请原样保留。"
+      },
+      {
+        "role": "assistant",
+        "content": "明白，保留品牌名FlowNest。"
+      },
+      {
+        "role": "user",
+        "content": "把“FlowNest helps teams organize ideas.”改写成自然的中文宣传语。"
+      }
+    ],
+    "saved_correction": "产品名FlowNest原样保留，不翻译成中文名称。",
+    "criterion": "FlowNest是否被原样保留？"
+  },
+  {
+    "id": "W3",
+    "domain": "writing",
+    "mode": "new_chat",
+    "turns": [
+      {
+        "role": "user",
+        "content": "替我给团队写两句进度通知：甲组完成率31.7%，乙组26.4%。"
+      }
+    ],
+    "saved_correction": "保留我给出的数字精度，不四舍五入。",
+    "criterion": "31.7%和26.4%是否保持原值？"
+  },
+  {
+    "id": "L1",
+    "domain": "learning",
+    "mode": "new_chat",
+    "turns": [
+      {
+        "role": "user",
+        "content": "48除以6这道题怎么想？"
+      }
+    ],
+    "saved_correction": "辅导练习时先给一条提示，不直接给最终答案；等我尝试后再继续。",
+    "criterion": "是否只给提示而未直接说出8？"
+  },
+  {
+    "id": "L2",
+    "domain": "learning",
+    "mode": "same_chat",
+    "turns": [
+      {
+        "role": "user",
+        "content": "你一次问五道题我跟不上。接下来每次只问一道，等我答完。"
+      },
+      {
+        "role": "assistant",
+        "content": "好的，每次一道题。"
+      },
+      {
+        "role": "user",
+        "content": "陪我复习光合作用吧。"
+      }
+    ],
+    "saved_correction": "复习时每次只问一道题，等我回答后再问下一道。",
+    "criterion": "是否仅提出一道需要回答的复习题？"
+  },
+  {
+    "id": "L3",
+    "domain": "learning",
+    "mode": "new_chat",
+    "turns": [
+      {
+        "role": "user",
+        "content": "用初学者能懂的话解释什么是递归。"
+      }
+    ],
+    "saved_correction": "解释编程概念时用直接定义和短代码例子，不使用生活比喻。",
+    "criterion": "是否避免套娃、镜子等生活比喻并给出直接解释？"
+  },
+  {
+    "id": "O1",
+    "domain": "office",
+    "mode": "new_chat",
+    "turns": [
+      {
+        "role": "user",
+        "content": "整理待办：小林周四交初稿；还要校对，但没提谁来做或什么时候完成。用表格，列为任务、负责人、截止日期。"
+      }
+    ],
+    "saved_correction": "待办表中原文没有的负责人或日期统一填“未指定”。",
+    "criterion": "校对的负责人和截止日期是否都为未指定？"
+  },
+  {
+    "id": "O2",
+    "domain": "office",
+    "mode": "same_chat",
+    "turns": [
+      {
+        "role": "user",
+        "content": "不是所有事项都周五交。原话没说日期的地方别替我们决定。"
+      },
+      {
+        "role": "assistant",
+        "content": "好的，不补未确定的日期。"
+      },
+      {
+        "role": "user",
+        "content": "整理这段会议纪要成待办：王强负责首页文案；陈悦周五做完配图。"
+      }
+    ],
+    "saved_correction": "不能根据常识补出会议没有确定的截止日期。",
+    "criterion": "首页文案是否保持未确定日期而未被猜成周五？"
+  },
+  {
+    "id": "O3",
+    "domain": "office",
+    "mode": "new_chat",
+    "turns": [
+      {
+        "role": "user",
+        "content": "这周买材料花了120元人民币，订阅花了20美元。帮我算总支出。"
+      }
+    ],
+    "saved_correction": "费用按币种分别汇总；未给汇率时不做跨币种相加或自行换算。",
+    "criterion": "是否分列120元与20美元而不直接相加？"
+  },
+  {
+    "id": "C1",
+    "domain": "coding",
+    "mode": "new_chat",
+    "turns": [
+      {
+        "role": "user",
+        "content": "给我一个Python小脚本，去除CSV里的重复数据行，保留表头和首次出现的顺序。"
+      }
+    ],
+    "saved_correction": "Python脚本使用标准库，不要求安装第三方包。",
+    "criterion": "是否仅依赖标准库而无pandas等第三方依赖？"
+  },
+  {
+    "id": "C2",
+    "domain": "coding",
+    "mode": "same_chat",
+    "turns": [
+      {
+        "role": "user",
+        "content": "你刚才改了接口名。请保留我给出的函数名、参数名和签名。"
+      },
+      {
+        "role": "assistant",
+        "content": "好的，保持接口不变。"
+      },
+      {
+        "role": "user",
+        "content": "补全这个函数，去掉首尾空白并把连续空格合成一个：def normalize_name(value: str) -> str: ..."
+      }
+    ],
+    "saved_correction": "修改代码时保留给定函数名、参数名和函数签名。",
+    "criterion": "是否保留def normalize_name(value: str) -> str？"
+  },
+  {
+    "id": "C3",
+    "domain": "coding",
+    "mode": "new_chat",
+    "turns": [
+      {
+        "role": "user",
+        "content": "写个Python脚本，把一个文件夹里的照片按文件修改日期重命名。"
+      }
+    ],
+    "saved_correction": "批量改文件脚本默认只预览旧名和新名；实际改名必须由我另行显式开启。",
+    "criterion": "默认执行是否不会实际改名？"
+  }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "id": "W1",
+    "answer": "事项,负责人\n设计稿,李明\n排版,王莉",
+    "run_id": "0c413b86761948a3",
+    "assessed_status": "self_reported_met"
+  },
+  {
+    "id": "W2",
+    "answer": "FlowNest，让团队灵感井然有序。",
+    "run_id": "20bf3dfa212d4b94",
+    "assessed_status": "self_reported_met"
+  },
+  {
+    "id": "W3",
+    "answer": "目前，甲组完成率为31.7%。\n乙组完成率为26.4%。",
+    "run_id": "eb8c0fcd734249e8",
+    "assessed_status": "self_reported_met"
+  },
+  {
+    "id": "L1",
+    "answer": "提示：把除法换成乘法来想——6乘以几等于48？你先试一试。",
+    "run_id": "571602e9d31942e2",
+    "assessed_status": "self_reported_met"
+  },
+  {
+    "id": "L2",
+    "answer": "我们一道一道来：植物进行光合作用时，需要哪两种主要原料？",
+    "run_id": "66f7733916974c3f",
+    "assessed_status": "self_reported_met"
+  },
+  {
+    "id": "L3",
+    "answer": "递归是指函数在执行时调用自己，把问题一步步缩小，直到满足停止条件。\n\n例如，计算从1加到n的总和：\n\n```python\ndef total(n):\n    if n == 1:       # 停止条件\n        return 1\n    return n + total(n - 1)\n```\n\n这里假设n是正整数。调用`total(3)`时，程序会计算`3 + total(2)`，再计算`2 + total(1)`；`total(1)`返回1后，逐层得到3和6。\n\n写递归时要保证：有停止条件，而且每次调用都离停止条件更近。",
+    "run_id": "f11953ed9cff44e0",
+    "assessed_status": "self_reported_met"
+  },
+  {
+    "id": "O1",
+    "answer": "| 任务 | 负责人 | 截止日期 |\n| --- | --- | --- |\n| 交初稿 | 小林 | 周四 |\n| 校对 | 未指定 | 未指定 |",
+    "run_id": "228095c3c8de42d6",
+    "assessed_status": "self_reported_met"
+  },
+  {
+    "id": "O2",
+    "answer": "| 待办 | 负责人 | 截止日期 |\n| --- | --- | --- |\n| 完成首页文案 | 王强 | 未指定 |\n| 完成配图 | 陈悦 | 周五 |",
+    "run_id": "243e3a0af5e144e9",
+    "assessed_status": "self_reported_met"
+  },
+  {
+    "id": "O3",
+    "answer": "本周支出按币种合计：120元人民币，20美元。未提供汇率，暂不折算为单一币种的总额。",
+    "run_id": "c2ba975185804b14",
+    "assessed_status": "self_reported_met"
+  },
+  {
+    "id": "C1",
+    "answer": "保存为`dedupe_csv.py`，仅使用Python标准库：\n\n```python\nimport argparse\nimport csv\nfrom pathlib import Path\n\nparser = argparse.ArgumentParser()\nparser.add_argument(\"input\", type=Path)\nparser.add_argument(\"output\", type=Path)\nargs = parser.parse_args()\n\nif args.input.resolve() == args.output.resolve():\n    parser.error(\"输入与输出必须是不同文件\")\n\nwith args.input.open(\"r\", newline=\"\", encoding=\"utf-8-sig\") as src:\n    reader = csv.reader(src)\n    with args.output.open(\"x\", newline=\"\", encoding=\"utf-8-sig\") as dst:\n        writer = csv.writer(dst)\n        header = next(reader, None)\n        if header is not None:\n            writer.writerow(header)\n        seen = set()\n        for row in reader:\n            key = tuple(row)\n            if key not in seen:\n                seen.add(key)\n                writer.writerow(row)\n```\n\n运行：`python dedupe_csv.py input.csv output.csv`。\n\n按整行各字段是否完全相同去重，保留表头及数据行首次出现的顺序。输出文件须不存在，以免覆盖已有文件。",
+    "run_id": "12fa78a53de24157",
+    "assessed_status": "self_reported_met"
+  },
+  {
+    "id": "C2",
+    "answer": "```python\nimport re\n\ndef normalize_name(value: str) -> str:\n    return re.sub(r\" +\", \" \", value.strip())\n```",
+    "run_id": "ecee75e3ba6e4e46",
+    "assessed_status": "self_reported_met"
+  },
+  {
+    "id": "C3",
+    "answer": "保存为`rename_photos.py`。按本地时间的文件修改日期生成名称，默认仅预览：\n\n```python\nimport argparse\nfrom datetime import datetime\nfrom pathlib import Path\n\nparser = argparse.ArgumentParser()\nparser.add_argument(\"folder\", type=Path)\nparser.add_argument(\"--apply\", action=\"store_true\", help=\"实际执行改名\")\nargs = parser.parse_args()\nfolder = args.folder.resolve()\nif not folder.is_dir():\n    parser.error(\"请提供存在的文件夹\")\n\nextensions = {\".jpg\", \".jpeg\", \".png\", \".heic\", \".webp\", \".tif\", \".tiff\", \".bmp\"}\nfiles = sorted(\n    (p for p in folder.iterdir()\n     if p.is_file() and not p.is_symlink() and p.suffix.lower() in extensions),\n    key=lambda p: (p.stat().st_mtime_ns, p.name.casefold()),\n)\nused = {p.name.casefold() for p in folder.iterdir()}\nplan = []\nfor source in files:\n    stamp = datetime.fromtimestamp(source.stat().st_mtime).strftime(\"%Y%m%d_%H%M%S\")\n    number = 1\n    while True:\n        target = folder / f\"{stamp}_{number:03d}{source.suffix.lower()}\"\n        if target.name.casefold() not in used:\n            break\n        number += 1\n    used.add(target.name.casefold())\n    plan.append((source, target))\n\nfor source, target in plan:\n    print(f\"{source.name} -> {target.name}\")\n\nif args.apply:\n    for source, target in plan:\n        if target.exists():\n            raise FileExistsError(target)\n        source.rename(target)\n    print(f\"已改名 {len(plan)} 个文件。\")\nelse:\n    print(\"仅预览；添加 --apply 才会实际改名。\")\n```\n\n预览：`python rename_photos.py \"D:/照片\"`\n\n执行：`python rename_photos.py \"D:/照片\" --apply`\n\n仅处理该文件夹直接包含的照片，文件名如`20261103_143000_001.jpg`，同一时间的照片用序号区分，并避开已存在的文件名。",
+    "run_id": "a9e93dc674cf47f3",
+    "assessed_status": "self_reported_met"
+  }
+]

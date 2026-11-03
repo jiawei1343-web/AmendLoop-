@@ -1,0 +1,4 @@
+interface:
+  display_name: "AmendLoop · 知改"
+  short_description: "把用户纠正变成有范围、可撤销的规则，回答前检查是否再次误解需求"
+  default_prompt: "使用 $ai-correction-memory，读取适用于当前任务的纠正规则，并按我的最新要求完成任务。"

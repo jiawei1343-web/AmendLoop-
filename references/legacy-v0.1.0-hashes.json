@@ -1,0 +1,18 @@
+{
+  "version": "0.1.0",
+  "files": {
+    "agents/openai.yaml": "7604cb23dee493b76fb22e47f148b10850e82d18e1a3582a9ca4966e19cb3a44",
+    "install.py": "7500fb6f204472dfbd677a2bf7c5e4c3e5a25fbb9a0230bcfae73eaf4c16fb34",
+    "LICENSE": "c272d73c1c77ef9025879fbffa5ebccef1b47b9afb904682f492b806ee37843a",
+    "references/commands.md": "2f7444d3e5da2f899e7971ecbfffb2690306e087c85e709f6a0febbac6f6b0c5",
+    "requirements-mcp.txt": "525209ab4882783b92035a07c79e8e95e60da14358f3319b3b03d5640d684511",
+    "scripts/demo.py": "a967fef974b14806ff9d1146bd6e7baeb2e021007f7bb277d131e383c2d13e71",
+    "scripts/mcp_server.py": "68f0fe7ac795af74bd5f9cf11c95d56694a7e68efaa1a54a439c9ac8ac5ff497",
+    "scripts/memory.py": "5d5bc60442a7d5df174ae74f4b7a791e03a94f0c215489699be55b21ddad9cb6",
+    "SKILL.md": "cfd2d45336eb9e825b227afc25dca09c87092e5d574263291395e59e14ddabfd",
+    "tests/test_mcp.py": "a17e55f149364258c0615fce6878b38a8562d538c4d1eb64f11693352d320199",
+    "tests/test_memory.py": "ca585ffbb3fd27d97edb372bf3531a91592b622d0e39d9777c8d0d0d7aae6997",
+    "使用说明.md": "b165b3fec156251c7e339da0f3596a586f1bf49d6b366d8ef4fce9ab4753b471",
+    "验收报告.md": "ce46527aee9df809a903e460086c8229060b5494ddf9a9a1fd089172d81b5d0a"
+  }
+}

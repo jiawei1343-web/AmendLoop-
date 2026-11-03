@@ -1,0 +1,50 @@
+{
+  "W1": {
+    "A": "treatment",
+    "B": "baseline"
+  },
+  "W2": {
+    "A": "treatment",
+    "B": "baseline"
+  },
+  "W3": {
+    "A": "baseline",
+    "B": "treatment"
+  },
+  "L1": {
+    "A": "baseline",
+    "B": "treatment"
+  },
+  "L2": {
+    "A": "treatment",
+    "B": "baseline"
+  },
+  "L3": {
+    "A": "baseline",
+    "B": "treatment"
+  },
+  "O1": {
+    "A": "baseline",
+    "B": "treatment"
+  },
+  "O2": {
+    "A": "treatment",
+    "B": "baseline"
+  },
+  "O3": {
+    "A": "treatment",
+    "B": "baseline"
+  },
+  "C1": {
+    "A": "baseline",
+    "B": "treatment"
+  },
+  "C2": {
+    "A": "baseline",
+    "B": "treatment"
+  },
+  "C3": {
+    "A": "treatment",
+    "B": "baseline"
+  }
+}

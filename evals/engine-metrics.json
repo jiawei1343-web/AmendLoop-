@@ -1,0 +1,18 @@
+{
+  "prepare_only_ms": {
+    "median": 0.06480000047304202,
+    "p95": 0.13380000018514693
+  },
+  "prepare_with_receipt_ms": {
+    "median": 0.5573500020545907,
+    "p95": 0.9372999993502162
+  },
+  "assess_ms": {
+    "median": 0.6148499996925239,
+    "p95": 1.1831000010715798
+  },
+  "samples": 120,
+  "rule_count": 1,
+  "mean_context_utf8_bytes": 1104,
+  "note": "Local engine only. Excludes process startup, model inference, tools dispatch and network. Not representative of large stores or end-to-end latency."
+}

@@ -1,0 +1,251 @@
+{
+  "cases": 12,
+  "total": {
+    "baseline": {
+      "met": 10,
+      "violated": 2,
+      "uncertain": 0
+    },
+    "treatment": {
+      "met": 12,
+      "violated": 0,
+      "uncertain": 0
+    }
+  },
+  "by_mode": {
+    "same_chat": {
+      "baseline": {
+        "met": 4,
+        "violated": 0,
+        "uncertain": 0
+      },
+      "treatment": {
+        "met": 4,
+        "violated": 0,
+        "uncertain": 0
+      }
+    },
+    "new_chat": {
+      "baseline": {
+        "met": 6,
+        "violated": 2,
+        "uncertain": 0
+      },
+      "treatment": {
+        "met": 8,
+        "violated": 0,
+        "uncertain": 0
+      }
+    }
+  },
+  "by_domain": {
+    "writing": {
+      "baseline": {
+        "met": 2,
+        "violated": 1,
+        "uncertain": 0
+      },
+      "treatment": {
+        "met": 3,
+        "violated": 0,
+        "uncertain": 0
+      }
+    },
+    "learning": {
+      "baseline": {
+        "met": 2,
+        "violated": 1,
+        "uncertain": 0
+      },
+      "treatment": {
+        "met": 3,
+        "violated": 0,
+        "uncertain": 0
+      }
+    },
+    "office": {
+      "baseline": {
+        "met": 3,
+        "violated": 0,
+        "uncertain": 0
+      },
+      "treatment": {
+        "met": 3,
+        "violated": 0,
+        "uncertain": 0
+      }
+    },
+    "coding": {
+      "baseline": {
+        "met": 3,
+        "violated": 0,
+        "uncertain": 0
+      },
+      "treatment": {
+        "met": 3,
+        "violated": 0,
+        "uncertain": 0
+      }
+    }
+  },
+  "regression_cases": [],
+  "rows": [
+    {
+      "id": "W1",
+      "mode": "new_chat",
+      "domain": "writing",
+      "treatment": {
+        "status": "met",
+        "evidence": "仅输出逗号分隔的表头和两行数据，没有代码围栏或说明，可直接保存为CSV。"
+      },
+      "baseline": {
+        "status": "violated",
+        "evidence": "CSV被包在```csv代码围栏中；完整输出直接保存会包含额外围栏行。"
+      }
+    },
+    {
+      "id": "W2",
+      "mode": "same_chat",
+      "domain": "writing",
+      "treatment": {
+        "status": "met",
+        "evidence": "宣传语原样保留品牌名FlowNest。"
+      },
+      "baseline": {
+        "status": "met",
+        "evidence": "宣传语原样保留品牌名FlowNest。"
+      }
+    },
+    {
+      "id": "W3",
+      "mode": "new_chat",
+      "domain": "writing",
+      "baseline": {
+        "status": "met",
+        "evidence": "甲组31.7%、乙组26.4%均与原值一致。"
+      },
+      "treatment": {
+        "status": "met",
+        "evidence": "甲组31.7%、乙组26.4%均与原值一致。"
+      }
+    },
+    {
+      "id": "L1",
+      "mode": "new_chat",
+      "domain": "learning",
+      "baseline": {
+        "status": "violated",
+        "evidence": "直接写出6×8＝48、每份有8个和48÷6＝8。"
+      },
+      "treatment": {
+        "status": "met",
+        "evidence": "只提示用6乘以几等于48来思考，未给出8。"
+      }
+    },
+    {
+      "id": "L2",
+      "mode": "same_chat",
+      "domain": "learning",
+      "treatment": {
+        "status": "met",
+        "evidence": "只提出一题：光合作用需要哪两种主要原料；一个问题要求列出两种原料不构成两道题。"
+      },
+      "baseline": {
+        "status": "met",
+        "evidence": "只提出一题：光合作用从空气中吸收哪种气体。"
+      }
+    },
+    {
+      "id": "L3",
+      "mode": "new_chat",
+      "domain": "learning",
+      "baseline": {
+        "status": "met",
+        "evidence": "直接解释函数调用自己处理更小同类任务，并用求和代码说明停止条件，没有生活比喻。"
+      },
+      "treatment": {
+        "status": "met",
+        "evidence": "直接解释函数自调用和问题缩小，并用求和代码说明停止条件，没有生活比喻。"
+      }
+    },
+    {
+      "id": "O1",
+      "mode": "new_chat",
+      "domain": "office",
+      "baseline": {
+        "status": "met",
+        "evidence": "校对行的负责人和截止日期都写为未明确，语义上均为未指定。"
+      },
+      "treatment": {
+        "status": "met",
+        "evidence": "校对行的负责人和截止日期均明确写为未指定。"
+      }
+    },
+    {
+      "id": "O2",
+      "mode": "same_chat",
+      "domain": "office",
+      "treatment": {
+        "status": "met",
+        "evidence": "首页文案的截止日期写为未指定，仅配图标周五。"
+      },
+      "baseline": {
+        "status": "met",
+        "evidence": "首页文案的截止日期写为未明确，仅配图标周五。"
+      }
+    },
+    {
+      "id": "O3",
+      "mode": "new_chat",
+      "domain": "office",
+      "treatment": {
+        "status": "met",
+        "evidence": "按币种分别列出120元人民币和20美元，并说明缺少汇率，未合并成数值总额。"
+      },
+      "baseline": {
+        "status": "met",
+        "evidence": "分别保留120元人民币和20美元的币种；虽用加号连接，但明确需先换算，合计公式也让20乘以汇率，未直接算成140。"
+      }
+    },
+    {
+      "id": "C1",
+      "mode": "new_chat",
+      "domain": "coding",
+      "baseline": {
+        "status": "met",
+        "evidence": "仅导入标准库csv，其他操作使用内置函数和类型，无第三方依赖。"
+      },
+      "treatment": {
+        "status": "met",
+        "evidence": "仅导入标准库argparse、csv和pathlib，无第三方依赖。"
+      }
+    },
+    {
+      "id": "C2",
+      "mode": "same_chat",
+      "domain": "coding",
+      "baseline": {
+        "status": "met",
+        "evidence": "完整保留def normalize_name(value: str) -> str:，函数名、参数名和类型签名未变。"
+      },
+      "treatment": {
+        "status": "met",
+        "evidence": "完整保留def normalize_name(value: str) -> str:，函数名、参数名和类型签名未变。"
+      }
+    },
+    {
+      "id": "C3",
+      "mode": "new_chat",
+      "domain": "coding",
+      "treatment": {
+        "status": "met",
+        "evidence": "--apply使用store_true且rename仅在if args.apply分支执行，默认只打印预览。"
+      },
+      "baseline": {
+        "status": "met",
+        "evidence": "--apply使用store_true且source.rename位于if args.apply内，未传参数时只打印计划。"
+      }
+    }
+  ],
+  "interpretation": "Small simulated preference-retention experiment; not real user correction counts or general accuracy."
+}

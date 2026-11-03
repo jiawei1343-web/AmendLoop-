@@ -1,0 +1,3 @@
+# Optional only. Core skill/CLI uses Python's standard library.
+# v1 maintenance API is intentionally pinned; v2 has a different API.
+mcp==1.30.0

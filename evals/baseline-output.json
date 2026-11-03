@@ -1,0 +1,50 @@
+[
+  {
+    "id": "W1",
+    "answer": "```csv\n事项,负责人\n设计稿,李明\n排版,王莉\n```"
+  },
+  {
+    "id": "W2",
+    "answer": "FlowNest，让团队的灵感井然有序。"
+  },
+  {
+    "id": "W3",
+    "answer": "甲组目前完成率为31.7%，请大家按计划推进后续工作。乙组目前完成率为26.4%，也请及时同步进展和遇到的问题。"
+  },
+  {
+    "id": "L1",
+    "answer": "48除以6，可以想成：把48个东西平均分成6份，每份有多少个？\n\n因为6×8＝48，所以每份有8个，也就是48÷6＝8。"
+  },
+  {
+    "id": "L2",
+    "answer": "我们先从一道基础题开始：植物进行光合作用时，需要从空气中吸收哪种气体？"
+  },
+  {
+    "id": "L3",
+    "answer": "递归就是：一个函数为了完成任务，调用自己去处理一个更小的同类任务。\n\n比如计算3＋2＋1，可以这样想：\n\n- 算到3：先算3＋“从2加到1的结果”。\n- 算到2：再算2＋“从1加到1的结果”。\n- 算到1：直接得到1，停止继续调用。\n\n```python\ndef add_to(n):\n    if n == 1:       # 停止条件\n        return 1\n    return n + add_to(n - 1)\n\nprint(add_to(3))  # 6\n```\n\n这里每次把n减小1，最后到达停止条件。递归的关键就是：**问题逐步变小，并且有明确的停止条件**。这个例子假设n是正整数。"
+  },
+  {
+    "id": "O1",
+    "answer": "| 任务 | 负责人 | 截止日期 |\n|---|---|---|\n| 提交初稿 | 小林 | 周四 |\n| 校对 | 未明确 | 未明确 |"
+  },
+  {
+    "id": "O2",
+    "answer": "| 任务 | 负责人 | 截止日期 |\n|---|---|---|\n| 首页文案 | 王强 | 未明确 |\n| 完成配图 | 陈悦 | 周五 |"
+  },
+  {
+    "id": "O3",
+    "answer": "目前支出为：**120元人民币＋20美元**。两种货币需要先按汇率换算，才能合并成一个金额。\n\n如果按人民币计算，总支出＝120＋20×美元兑人民币汇率。你希望按什么汇率计算？"
+  },
+  {
+    "id": "C1",
+    "answer": "下面按整行内容去重，保留表头，以及每条数据第一次出现的顺序。结果写入新文件。\n\n```python\nimport csv\n\ninput_path = 'input.csv'\noutput_path = 'output.csv'\n\nwith open(input_path, 'r', encoding='utf-8-sig', newline='') as src, \\\n     open(output_path, 'w', encoding='utf-8-sig', newline='') as dst:\n    reader = csv.reader(src)\n    writer = csv.writer(dst)\n\n    header = next(reader, None)\n    if header is not None:\n        writer.writerow(header)\n\n    seen = set()\n    for row in reader:\n        key = tuple(row)\n        if key not in seen:\n            seen.add(key)\n            writer.writerow(row)\n```\n\n将`input_path`和`output_path`改成你的文件路径后运行。字段内容完全相同的数据行才会被视为重复。"
+  },
+  {
+    "id": "C2",
+    "answer": "```python\nimport re\n\ndef normalize_name(value: str) -> str:\n    return re.sub(r' +', ' ', value.strip())\n```"
+  },
+  {
+    "id": "C3",
+    "answer": "这个脚本使用文件的修改时间，命名为`20261103_143025_001.jpg`。默认只预览，添加`--apply`才执行重命名；遇到同名文件会增加序号。\n\n保存为`rename_photos.py`：\n\n```python\nfrom pathlib import Path\nfrom datetime import datetime\nimport argparse\n\nparser = argparse.ArgumentParser()\nparser.add_argument('folder', type=Path, help='照片所在文件夹')\nparser.add_argument('--apply', action='store_true', help='执行重命名')\nargs = parser.parse_args()\n\nfolder = args.folder.resolve()\nif not folder.is_dir():\n    parser.error('指定路径不是文件夹')\n\nextensions = {'.jpg', '.jpeg', '.png', '.webp', '.heic', '.tif', '.tiff', '.bmp'}\nphotos = [\n    (p, p.stat().st_mtime)\n    for p in folder.iterdir()\n    if p.is_file() and p.suffix.lower() in extensions\n]\nphotos.sort(key=lambda item: (item[1], item[0].name))\n\n# 避开现有文件名和本次已分配的文件名。\nused = {p.name.casefold() for p in folder.iterdir()}\nplans = []\nfor source, modified in photos:\n    stamp = datetime.fromtimestamp(modified).strftime('%Y%m%d_%H%M%S')\n    number = 1\n    while True:\n        name = f'{stamp}_{number:03d}{source.suffix.lower()}'\n        if name.casefold() not in used:\n            break\n        number += 1\n    used.add(name.casefold())\n    plans.append((source, folder / name))\n\nfor source, target in plans:\n    print(f'{source.name} -> {target.name}')\n    if args.apply:\n        if target.exists():\n            raise FileExistsError(f'目标文件已存在：{target}')\n        source.rename(target)\n\nprint(f'共{len(plans)}张照片，' + ('已重命名。' if args.apply else '仅预览。'))\n```\n\n先预览：\n\n```bash\npython rename_photos.py \"D:\\照片\"\n```\n\n确认后执行：\n\n```bash\npython rename_photos.py \"D:\\照片\" --apply\n```\n\n只处理该文件夹内的照片，不包含子文件夹；日期按电脑本地时区显示。"
+  }
+]
