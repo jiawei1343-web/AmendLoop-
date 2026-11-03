@@ -1,0 +1,209 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="AmendLoop: corrections that carry forward. 本地 AI 纠正记忆技能的机制流程图、安装和使用说明。"><title>AmendLoop · README</title><style>
+:root{color-scheme:light;--ink:#163a35;--muted:#60766f;--green:#117c6f;--line:#d9e6df}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#edf3ee;color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:16px;line-height:1.85}
+main{max-width:1080px;margin:36px auto 60px;padding:38px 54px 54px;background:white;border:1px solid var(--line);border-radius:20px;box-shadow:0 12px 45px #173a3508}
+h1{font-size:38px;margin:0 0 12px;letter-spacing:-.7px}h2{font-size:25px;border-top:1px solid var(--line);padding-top:30px;margin:38px 0 14px}h3{font-size:20px}p{margin:12px 0 18px}img{display:block;max-width:100%;height:auto;border-radius:12px;margin:22px auto}a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}strong{font-weight:650}
+pre{padding:18px 22px;background:#153c35;color:#eef8f1;border-radius:12px;overflow:auto;line-height:1.65}code{font-family:Consolas,'SFMono-Regular',monospace;font-size:.9em}p code,td code{background:#e9f3ee;padding:2px 5px;border-radius:4px}table{border-collapse:collapse;width:100%;margin:18px 0 26px;font-size:15px}th,td{padding:12px 15px;border:1px solid var(--line);vertical-align:top;text-align:left}th{background:#eaf4ef;font-weight:650}tr:nth-child(even){background:#f8fbf8}ul{padding-left:23px}li{margin:8px 0}footer{border-top:1px solid var(--line);padding-top:24px;color:var(--muted);font-size:14px;margin-top:40px}
+@media(max-width:760px){main{margin:0;padding:24px 18px;border-radius:0;border:0}h1{font-size:30px}h2{font-size:23px}table{display:block;overflow-x:auto}th,td{min-width:120px;padding:10px}body{font-size:15px}}
+@media print{body{background:white}main{margin:0;max-width:none;border:0;box-shadow:none}h2,img,table,pre{break-inside:avoid}a{color:var(--ink)}}</style></head><body><main><h1 id="amendloop">AmendLoop</h1>
+<p><strong>Corrections that carry forward.</strong></p>
+<p>把你的纠正，带进下一次回答。</p>
+<p>AmendLoop is a local correction-memory skill for AI assistants, with scoped rules, inspectable checks, and reversible changes.</p>
+<p><img src="assets/amendloop-route-map.png" alt="AmendLoop机制流程图：纠正进入四类范围分支，经任务场景筛选和自评后交付；未满足返回修改，不确定则保留限制"></p>
+<p><a href="assets/amendloop-route-map.svg">打开可缩放的矢量流程图</a></p>
+<p>AmendLoop（中文名：知改）是一款本地 AI 技能：把你说过的“不是这个意思”整理成有范围的要求，让当前模型在后续回答前读取、检查，并留下可查看的依据。</p>
+<p>面向写作、学习、办公和编程中的日常沟通。你照常说话，规则的整理和使用由技能配合当前模型完成。</p>
+<p><strong>版本：0.2.2 流程图与命名版</strong> · <strong>Python 3.10+</strong> · <strong>本地 SQLite</strong> · <strong>可选 MCP</strong> · <strong>MIT</strong></p>
+<p><a href="#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B">快速开始</a> · <a href="#%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F">工作方式</a> · <a href="#%E5%B8%B8%E7%94%A8%E8%AF%B4%E6%B3%95">常用说法</a> · <a href="#%E6%95%88%E6%9E%9C%E4%B8%8E%E9%AA%8C%E8%AF%81">效果与验证</a> · <a href="%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.md">详细使用说明</a></p>
+<h2 id="为什么叫-amendloop">为什么叫 AmendLoop</h2>
+<p><strong>Amend</strong> 是修正，<strong>Loop</strong> 是反馈循环：理解纠正、限定范围、用于后续回答，再根据新的反馈改进。</p>
+<p>建议 GitHub 仓库名为 <code>amendloop</code>。中文名保留「知改」。现有安装目录、命令标识与调用名继续使用 <code>ai-correction-memory</code>，升级可保留已有配置和数据。</p>
+<h2 id="快速开始">快速开始</h2>
+<p>需要允许本地技能或工具执行的 AI 宿主，以及可用的 Python 3.10+。核心技能不需要 API 密钥、不需要另一个模型，也不需要先安装 MCP SDK。</p>
+<p><strong>1. 安装</strong></p>
+<p>解压安装包，在这个 README 所在目录执行：</p>
+<pre><code class="language-powershell">python install.py
+</code></pre>
+<p>已有版本时升级：</p>
+<pre><code class="language-powershell">python install.py --upgrade
+</code></pre>
+<p>安装程序会核对旧文件、保护个人修改并备份旧程序。遇到权限限制时须由宿主授予目标目录权限。Windows 上若 <code>python</code> 是失效的别名，请使用实际 Python 的完整路径；详见<a href="%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.md#%E5%9C%A8-codex-%E5%AE%89%E8%A3%85">使用说明</a>。</p>
+<p><strong>2. 在新聊天中调用</strong></p>
+<pre><code class="language-text">使用 $ai-correction-memory，按我的纠正更新理解，回答前检查是否再次误解需求。
+</code></pre>
+<p>技能在界面中显示为 <strong>「AmendLoop · 知改」</strong>。是否自动选择它由宿主决定；显式调用最可靠。</p>
+<p><strong>3. 照常表达要求</strong></p>
+<pre><code class="language-text">这次先给结论，再解释原因。
+</code></pre>
+<p>这是当前任务的例外。任务结束后恢复原偏好。如果你希望跨聊天保存，可以明确说：</p>
+<pre><code class="language-text">记住，以后回答都先给结论，再解释必要的依据。
+</code></pre>
+<p>普通纠正不会自动变成所有任务都适用的长期规则。</p>
+<h2 id="工作方式">工作方式</h2>
+<p>主图有三个关键分岔：</p>
+<ul>
+<li><strong>范围分流</strong>：按用户原话选择本次任务、当前会话、指定项目或长期偏好。</li>
+<li><strong>检查回路</strong>：满足要求才交付；未满足返回草稿修改；不确定就说明限制，保留不确定状态。</li>
+<li><strong>反馈回流</strong>：用户再次纠正后回到入口，重新明确要求；不会自动变成模型训练。</li>
+</ul>
+<p>每条规则保存四类信息：</p>
+<table>
+<thead>
+<tr>
+<th>信息</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>你要的结果</td>
+<td>先给结论，再解释依据</td>
+</tr>
+<tr>
+<td>已拒绝的做法</td>
+<td>先铺陈很长的背景，末尾才回答</td>
+</tr>
+<tr>
+<td>验收问题</td>
+<td>第一段是否直接回答了问题？</td>
+</tr>
+<tr>
+<td>来源与范围</td>
+<td>用户原话；本次任务、当前会话、项目或长期偏好</td>
+</tr>
+</tbody></table>
+<p>本地工具负责存储、版本、检索和过程记录；当前聊天模型负责理解语义和检查回答。程序不会把“没有命中禁用词”当作语义检查通过。</p>
+<h2 id="检查过程可以追踪">检查过程可以追踪</h2>
+<p>你可以随时问：<strong>“刚才哪些规则实际生效了？”</strong></p>
+<p>AmendLoop 区分“已读取”“已扫描草稿”“模型自报满足”“需要修改”“不确定”。调用过工具和完成检查，是不同阶段。检查记录包括简短依据；它依然是模型自评，不能当作独立验证。</p>
+<h2 id="记忆用在正确的范围">记忆用在正确的范围</h2>
+<p><img src="assets/amendloop-domain-tracks.png" alt="场景分流图：写作和编程沿不同轨道分别读取详细解释与简洁给代码的要求，彼此不覆盖"></p>
+<p>同一偏好的写作版和编程版会分别保留。在每个领域内，依次由任务、会话、项目、全局规则处理覆盖。你当前明确提出的要求优先于保存的偏好。</p>
+<h2 id="撤销也有自己的路线">撤销也有自己的路线</h2>
+<p><img src="assets/amendloop-history-branches.png" alt="历史分叉图：C可撤销到B再到A并逐步重做；在B改为D后，旧C分支停止重做但审计记录保留"></p>
+<p>连续撤销沿状态历史后退，重做沿当前分支前进。从旧状态另作修改会形成新分支；相应旧重做分支不再可用，但审计事件保留。每次操作都检查版本，避免覆盖后来的修改。</p>
+<h2 id="常用说法">常用说法</h2>
+<table>
+<thead>
+<tr>
+<th>你说</th>
+<th>AmendLoop 如何处理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>“不是这个意思，我要……”</td>
+<td>更新当前理解，整理纠正与验收问题</td>
+</tr>
+<tr>
+<td>“只这次这样做”</td>
+<td>绑定当前任务，结束后不继续套用</td>
+</tr>
+<tr>
+<td>“这个项目以后都这样”</td>
+<td>保存项目规则，保留你的保存原话</td>
+</tr>
+<tr>
+<td>“记住，以后都这样”</td>
+<td>保存跨会话偏好</td>
+</tr>
+<tr>
+<td>“你记住了什么？”</td>
+<td>列出规则和适用范围</td>
+</tr>
+<tr>
+<td>“撤销刚才的修改 / 重做”</td>
+<td>沿规则历史后退 / 前进</td>
+</tr>
+<tr>
+<td>“这条规则只用到这个日期”</td>
+<td>设置带时区的有效期</td>
+</tr>
+<tr>
+<td>“清理重复规则”</td>
+<td>提供候选；合并确认的完全相同行为，保留来源</td>
+</tr>
+<tr>
+<td>“忘掉这条规则”</td>
+<td>删除指定规则及数据库内相关历史与生效记录</td>
+</tr>
+<tr>
+<td>“备份 / 导出我的规则”</td>
+<td>创建一致性快照或可迁移的 JSON 文件</td>
+</tr>
+</tbody></table>
+<p>当前任务与会话规则也会落盘，只是使用范围受限。独立备份和导出文件不会随单条规则删除而自动消失。</p>
+<h2 id="支持哪些使用方式">支持哪些使用方式</h2>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>当前状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Codex 本地技能</td>
+<td>已安装、验证；使用 <code>$ai-correction-memory</code> 调用</td>
+</tr>
+<tr>
+<td>Python 命令行</td>
+<td>可独立管理规则；核心只用标准库</td>
+</tr>
+<tr>
+<td>MCP stdio 工具</td>
+<td>提供 13 个工具，实际接口往返测试通过；需安装可选 SDK</td>
+</tr>
+<tr>
+<td>其他开放本地工具或 MCP 的宿主</td>
+<td>可接入，需要按宿主配置，未逐一验证</td>
+</tr>
+<tr>
+<td>未开放接入能力的普通聊天网页</td>
+<td>本包不能自动注入或截获其聊天</td>
+</tr>
+</tbody></table>
+<p>MCP 安装与配置见<a href="%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.md#%E5%8F%AF%E9%80%89-mcp-%E6%8E%A5%E5%85%A5">使用说明</a>，命令及规则格式见<a href="references/commands.md">命令参考</a>。</p>
+<h2 id="效果与验证">效果与验证</h2>
+<p>v0.2 核心完成了 <strong>57 项自动化测试，零失败、零跳过</strong>，覆盖存储、范围、撤销、迁移、升级和实际 MCP 接口。本次 0.2.2 更新英文名称、机制流程图、文档与版本标识，保留原始测试记录及核心验收报告。</p>
+<p>另有 12 个模拟对话的独立匿名对照评测：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th align="right">基线满足偏好</th>
+<th align="right">技能组满足偏好</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>同一聊天已有纠正</td>
+<td align="right">4 / 4</td>
+<td align="right">4 / 4</td>
+</tr>
+<tr>
+<td>新聊天取回长期偏好</td>
+<td align="right">6 / 8</td>
+<td align="right">8 / 8</td>
+</tr>
+<tr>
+<td>合计</td>
+<td align="right">10 / 12</td>
+<td align="right">12 / 12</td>
+</tr>
+</tbody></table>
+<p>这是小样本的偏好保留结果。新聊天的基线未获得旧偏好，不符合旧偏好不等于回答当前问题错误。本次没有证明同一聊天内的额外收益，也没有真实用户长期纠正次数的数据。</p>
+<p><a href="%E9%AA%8C%E6%94%B6%E6%8A%A5%E5%91%8A.md">核心验收报告</a> · <a href="test-results.json">原始测试结果</a> · <a href="evals/%E8%AF%84%E6%B5%8B%E6%96%B9%E6%B3%95.md">评测方法与限制</a> · <a href="evals/summary.json">逐项评分</a></p>
+<h2 id="数据与开源组件">数据与开源组件</h2>
+<ul>
+<li><strong>本地 SQLite / FTS5</strong>：保存规则、历史和生效记录，提供词项检索。<a href="https://www.sqlite.org/fts5.html">SQLite 文档</a>，<a href="https://www.sqlite.org/copyright.html">公共领域说明</a>。</li>
+<li><strong>官方 MCP Python SDK</strong>：可选工具接入，固定为 <code>mcp==1.30.0</code>。<a href="https://github.com/modelcontextprotocol/python-sdk">开源项目</a>，MIT 许可证；通过包管理器安装，本包不复制其源码。</li>
+<li><strong>AmendLoop 自有实现</strong>：规则范围、分场景覆盖、多步撤销重做、自评记录、整理、迁移、升级保护及技能工作流。</li>
+</ul>
+<p>应用不向外部服务发送规则；规则被工具取回后会进入当前宿主的模型上下文。本地数据库未加密，生效记录可能包含规则原文和简短回答依据。数据位置和备份管理见<a href="%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.md#%E6%95%B0%E6%8D%AE%E4%BD%8D%E7%BD%AE%E4%B8%8E%E8%BF%81%E7%A7%BB">使用说明</a>。</p>
+<p>本项目及原创视觉素材采用 <a href="LICENSE">MIT 许可证</a>。<code>assets/</code> 同时提供 README 使用的 PNG 和可编辑 SVG；图中箭头表达流程、条件分支与反馈回路，而不是产品界面截图。</p>
+<h2 id="开发与复现">开发与复现</h2>
+<pre><code class="language-powershell">python -m unittest discover -s tests -v
+python scripts/demo.py
+</code></pre>
+<p>未安装可选 MCP SDK 时，对应测试会明确跳过。独立评测的输入、匿名答案和评分脚本在 <code>evals/</code>，复现步骤见<a href="evals/%E8%AF%84%E6%B5%8B%E6%96%B9%E6%B3%95.md">评测方法</a>。</p>
+<h2 id="使用边界">使用边界</h2>
+<p>AmendLoop 帮助保存和使用纠正，不能强制所有宿主自动调用，也不能保证模型永不误解。模型自评可能不准确；过期或冲突的规则仍需根据当前任务处理。它不会改变模型权重、输入能力或上下文上限。</p>
+<p>如果你发现新的误用，可以保留“用户要求 → 实际回答 → 期望行为”的最小示例，先删除个人信息，再用于本地复现和改进。</p>
+<footer>AmendLoop · 知改　｜　0.2.2　｜　<a href="README.md">Markdown 源文档</a>　·　<a href="LICENSE">MIT License</a><br>本页可离线打开，流程图均随安装包提供。</footer></main></body></html>
