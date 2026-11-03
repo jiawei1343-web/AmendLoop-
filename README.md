@@ -1,5 +1,3 @@
-[README.md](https://github.com/user-attachments/files/34314537/README.md)
-
 # AmendLoop
 
 **Corrections that carry forward.**
